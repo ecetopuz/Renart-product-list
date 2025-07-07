@@ -33,7 +33,8 @@ const fetchProducts = async () => {
     if (filters.min_popularity) params.append('min_popularity', filters.min_popularity);
     
     
-    const response = await axios.get('http://localhost:5000/products', { params });
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const response = await axios.get(`${apiUrl}/products`, { params });
     products.value = response.data;
   } catch (err) {
     console.error('Error while retrieving API data:', err);
