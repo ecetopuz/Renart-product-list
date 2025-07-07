@@ -1,0 +1,42 @@
+
+/* --- Avenir Font Family --- */
+@font-face {
+  font-family: 'Avenir'; 
+  src: url('./Fonts/avenir/Avenir-Book.ttf') format('truetype'); 
+  font-weight: 400; 
+  font-style: normal;
+}
+
+
+/* --- Montserrat Font Family --- */
+@font-face {
+  font-family: 'Montserrat'; 
+  src: url('./Fonts/montserat/Montserrat-Regular.ttf') format('truetype'); 
+  font-weight: 400; /* Regular */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./Fonts/montserat/Montserrat-Medium.otf') format('opentype'); 
+  font-weight: 500; /* Medium */
+  font-style: normal;
+}
+
+
+:root {
+  
+  --font-primary: 'Avenir', sans-serif;
+  --font-secondary: 'Montserrat', sans-serif;
+  --text-color: #333;
+  --background-color: #f0f2f5;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-secondary); 
+  color: var(--text-color);
+  background-color: var(--background-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
