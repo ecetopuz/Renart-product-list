@@ -2,15 +2,27 @@ import json
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
-
+import os
 app = Flask(__name__)
 CORS(app)
 
 def get_real_time_gold_price():
     """
-    It pulls the GLD ETF (stock) representing the gold price from Finnhub.io. It converts the incoming stock price into ounce and then gram gold price.
+    Fetches the GLD ETF (a stock that tracks gold prices) from Finnhub.io.
+    Converts the stock price to the price per ounce, then to price per gram of gold.
+    The API key is read from environment variables for security.
     """
-    API_KEY = "d1m3l49r01qvvurju020d1m3l49r01qvvurju02g" 
+    # 1. The API key is now read from environment variables instead of hardcoding it.
+    # This is done using 'os.environ.get()'.
+    API_KEY = os.environ.get("FINNHUB_API_KEY") 
+    
+    # 2. If the API key is not defined in the environment variables,
+    # print an error message and return a safe default value.
+    if not API_KEY:
+        print("ERROR: FINNHUB_API_KEY environment variable not found. Using default value.")
+        return 70.0  # Safe default price
+
+    # 3. The request URL is constructed using the found API key.
     url = f"https://finnhub.io/api/v1/quote?symbol=GLD&token={API_KEY}"
     DEFAULT_GOLD_PRICE = 70.0
     
@@ -23,13 +35,13 @@ def get_real_time_gold_price():
             price_per_share = data['c']
             price_per_ounce = price_per_share * 10 
             price_per_gram = price_per_ounce / 31.1035
-            print(f" Real-time gold price (Finnhub/GLD Proxy) successfully withdrawn:{round(price_per_gram, 2)} USD/gram")
+            print(f"Real-time gold price (Finnhub/GLD Proxy) fetched successfully: {round(price_per_gram, 2)} USD/gram")
             return price_per_gram
         else:
-            print("Could not get valid price data from API (GLD). Using default value.")
+            print("Valid price data not received from API (GLD). Using default value.")
             return DEFAULT_GOLD_PRICE
     except requests.exceptions.RequestException as e:
-        print(f" Finnhub API (GLD) could not be reached:{e}. The default value is used.")
+        print(f"Could not reach Finnhub API (GLD): {e}. Using default value.")
         return DEFAULT_GOLD_PRICE
 
 
